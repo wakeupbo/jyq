@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>致姜云琪</title>
+    <style>*{margin:0;padding:0;overflow:hidden;}body{background:#000;}</style>
+</head>
+<body>
+<script>
+const texts = ["姜云琪","愿你每天都充满阳光","姜云琪","愿你拥有幸福和快乐","姜云琪","愿你天天开心"];
+const colors = ["pink","lightblue","lightgreen","lemonchiffon","hotpink","skyblue"];
+const sw = window.innerWidth, sh = window.innerHeight;
+
+// 爱心坐标公式（和你原版完全一样）
+function getHeartPoints(n){
+    let p = [];
+    for(let i=0;i<n;i++){
+        let th = i/n * Math.PI *2;
+        let x = 16*Math.sin(th)**3;
+        let y = 13*Math.cos(th)-5*Math.cos(2*th)-2*Math.cos(3*th)-Math.cos(4*th);
+        let sx = sw/2 + x*20 -75;
+        let sy = sh/2 - y*20 -30;
+        p.push([sx,sy]);
+    }
+    return p;
+}
+
+// 创建弹窗（和你原版一样）
+function createTip(x,y,text){
+    let div = document.createElement('div');
+    div.style.position = 'absolute';
+    div.style.left = x+'px';
+    div.style.top = y+'px';
+    div.style.width = '150px';
+    div.style.height = '60px';
+    div.style.background = colors[Math.floor(Math.random()*colors.length)];
+    div.style.textAlign = 'center';
+    div.style.lineHeight = '60px';
+    div.style.fontSize = '14px';
+    div.style.fontFamily = '微软雅黑';
+    div.innerText = text || texts[Math.floor(Math.random()*texts.length)];
+    document.body.appendChild(div);
+    return div;
+}
+
+// 主动画（和你原版流程完全一致）
+async function start(){
+    let points = getHeartPoints(150);
+    // 爱心轨迹
+    for(let i=0;i<points.length;i++){
+        let [x,y] = points[i];
+        createTip(x,y,i===points.length-1?"姜云琪":null);
+        await new Promise(r=>setTimeout(r,30));
+    }
+    await new Promise(r=>setTimeout(r,1000));
+    document.body.innerHTML = '';
+
+    // 满屏弹窗
+    let total = Math.floor(sw/150 * sh/40 +50);
+    for(let i=0;i<total;i++){
+        let x = Math.random()*(sw-150);
+        let y = Math.random()*(sh-60);
+        createTip(x,y);
+        await new Promise(r=>setTimeout(r,5));
+    }
+    await new Promise(r=>setTimeout(r,10000));
+    document.body.innerHTML = '';
+}
+start();
+</script>
+</body>
+</html>
